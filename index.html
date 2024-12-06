@@ -15,6 +15,7 @@
       flex-direction: column;
       background-color: #f0f0f0;
       height: 100vh;
+      overflow: hidden; /* Impede a rolagem da página */
     }
 
     h1 {
@@ -112,13 +113,23 @@
       ctx.fill();
     };
 
-    // Eventos para dispositivos móveis e desktop
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('touchstart', startDrawing);
-    canvas.addEventListener('touchmove', draw);
-    canvas.addEventListener('touchend', stopDrawing);
+    // Detectando o tipo de dispositivo (touch ou mouse)
+    const setupEvents = () => {
+      if ('ontouchstart' in window) {
+        // Eventos de toque (móveis)
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+      } else {
+        // Eventos de mouse (desktop)
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+      }
+    };
+
+    setupEvents(); // Chama a função para configurar os eventos baseados no dispositivo
   </script>
 </body>
 </html>
