@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raspadinha Biofórmula</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background-color: #f0f0f0;
+      height: 100vh;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      text-align: center;
+      color: #000;
+      animation: blink 1s infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes blink {
+      0%, 50% {
+        color: #002776; /* Azul da bandeira do Brasil */
+      }
+      100% {
+        color: #00c8b3; /* Verde água (mar de Maceió) */
+      }
+    }
+
+    .raspadinha-container {
+      position: relative;
+      width: 400px; /* Largura fixa */
+      height: 200px; /* Altura fixa */
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .imagem-fundo {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .imagem-capa {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Raspadinha Biofórmula</h1>
+  <div class="raspadinha-container">
+    <img src="atualizadopremio.png" alt="Imagem de fundo" class="imagem-fundo">
+    <canvas class="imagem-capa"></canvas>
+  </div>
+
+  <script>
+    const canvas = document.querySelector('.imagem-capa');
+    const ctx = canvas.getContext('2d');
+    const container = document.querySelector('.raspadinha-container');
+    const fundo = document.querySelector('.imagem-fundo');
+
+    // Configurar o canvas
+    canvas.width = 400; // Largura fixa
+    canvas.height = 200; // Altura fixa
+
+    // Imagem de capa (cor sólida ou imagem)
+    const capa = new Image();
+    capa.src = 'capa0.jpg'; // Substitua pelo caminho da sua imagem de capa
+    capa.onload = () => {
+      ctx.drawImage(capa, 0, 0, canvas.width, canvas.height);
+    };
+
+    // Configuração de raspagem
+    let isDrawing = false;
+
+    const startDrawing = (e) => {
+      isDrawing = true;
+      draw(e);
+    };
+
+    const stopDrawing = () => {
+      isDrawing = false;
+      ctx.beginPath();
+    };
+
+    const draw = (e) => {
+      if (!isDrawing) return;
+
+      // Coordenadas para toque ou mouse
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, 20, 0, Math.PI * 2);
+      ctx.fill();
+    };
+
+    // Eventos para dispositivos móveis e desktop
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('touchstart', startDrawing);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', stopDrawing);
+  </script>
+</body>
+</html>
